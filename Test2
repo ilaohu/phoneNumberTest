@@ -1,0 +1,82 @@
+package com.test;
+
+import java.util.*;
+
+/**
+ * Created by 梁家俊
+ * 2021-03-30 10:55
+ */
+public class Test2 {
+    public List<String> letterConvert(int[] digits) {
+        List<String> combinations = new ArrayList<String>();
+        if (digits.length == 0) {
+            return combinations;
+        }
+        Map<Integer, String> phoneMap = new HashMap<Integer, String>() {{
+            put(1, "");
+            put(2, "abc");
+            put(3, "def");
+            put(4, "ghi");
+            put(5, "jkl");
+            put(6, "mno");
+            put(7, "pqrs");
+            put(8, "tuv");
+            put(9, "wxyz");
+        }};
+        backtrack(combinations, phoneMap, digits, 0, new StringBuffer());
+        return combinations;
+    }
+
+    public void backtrack(List<String> combinations, Map<Integer, String> phoneMap, int[] digits,
+                          int index, StringBuffer combination) {
+
+        digits=changeNums(digits);
+        if (index == digits.length) {
+            combinations.add(combination.toString());
+        } else {
+            int digit = digits[index];
+            String letters = phoneMap.get(digit);
+            int lettersCount = letters.length();
+            for (int i = 0; i < lettersCount; i++) {
+                combination.append(letters.charAt(i));
+                backtrack(combinations, phoneMap, digits, index + 1, combination);
+                combination.deleteCharAt(index);
+            }
+        }
+    }
+
+    public static int[] changeNums(int[] nums){
+        ArrayList arrayList=new ArrayList();
+        if(nums!=null&&nums.length>0){
+            for(int a:nums){
+              int temp1=a/10;
+              int temp2=a%10;
+                if(a>=10){
+                    if(temp1>1){
+                        arrayList.add(temp1);
+                    }
+                    if(temp2>1){
+                        arrayList.add(temp2);
+                    }
+                }else if(a>=2&&a<10){
+                    arrayList.add(a);
+                }
+            }
+            int[] newInts=new int[arrayList.size()];
+            for(int i=0;i<arrayList.size();i++){
+                newInts[i]=(Integer) arrayList.get(i);
+            }
+            return newInts;
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        LoggerTest2 test2 = new LoggerTest2();
+        //int[] nums={2,3};
+        int[] nums = {0,2};
+        System.out.println(test2.letterConvert(nums).toString());
+
+    }
+}
+
